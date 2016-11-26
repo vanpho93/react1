@@ -42,18 +42,23 @@ var Form = React.createClass(
 );
 
 var Gia = React.createClass({
-  getInitialState: function(){
-    return {num: 0};
+  show(txt){
+    alert(txt);
   },
-  add: function(){
-    var num1 = this.state.num + 1;
-    this.setState({num: num1});
+  getInitialState(){
+    return {num: 0, price: this.props.price};
   },
-  render: function(){
+  add(){
+    var gia = parseInt(this.state.price) + 1;
+    var num1 = this.state.num + 1
+    this.setState({num: num1, price: gia});
+  },
+  render(){
     return (
       <div>
-        <p>{this.props.price}</p>
+        <p>{this.state.price}</p>
         <button onClick={this.add}>{this.state.num}</button>
+        <button onClick={  () => this.show('KhoaPham')  }>Show</button>
       </div>
     )
   }

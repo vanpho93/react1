@@ -9,5 +9,5 @@ app.listen(3000, function(){
 });
 
 app.get('/', function(req, res){
-  res.render('homepage');
+  res.rende('homepage');
 })

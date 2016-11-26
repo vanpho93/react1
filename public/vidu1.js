@@ -1,11 +1,27 @@
+
 var Note = React.createClass(
   {
+    getInitialState: function(){
+      return {soHocVien: 20}
+    },
+    addStudent: function(){
+      var num = this.state.soHocVien;
+      this.setState({soHocVien: num + 1})
+    },
+    handleClick: function(){
+      var msg = this.props.txt + this.props.khaiGiang + this.props.gia;
+      alert(msg);
+    },
     render: function(){
+      var that = this;
       return(
-        <div>
+        <div className="note">
           <p>{this.props.txt}</p>
           <p>Khai giang ngay: {this.props.khaiGiang}</p>
-          <Gia/>
+          <Gia price={this.props.gia}/>
+          <p>So hoc vien: {this.state.soHocVien}</p>
+          <button onClick={this.handleClick}>Get info</button>
+          <button onClick={this.addStudent}>Them hoc vien</button>
         </div>
       )
     }
@@ -27,14 +43,14 @@ var Form = React.createClass(
 
 var Gia = React.createClass({
   render: function(){
-    return <p>100</p>
+    return <p>{this.props.price}</p>
   }
 });
 
 ReactDOM.render(
   <div>
-    <Note txt="NodeJS" khaiGiang="30/10"/>
-    <Note txt="ReactJS" khaiGiang="10/10"/>
+    <Note txt="NodeJS" khaiGiang="30/10" gia="100"/>
+    <Note txt="ReactJS" khaiGiang="10/10" gia="200"/>
   </div>,
   document.getElementById('root')
 );

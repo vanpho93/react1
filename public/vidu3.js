@@ -3,7 +3,8 @@ var Note = React.createClass({
   remove(){
     var arr = that.state.mang;
     arr.splice(arr.indexOf(this.props.children), 1);
-    that.setState({mang: arr});
+    that.state.mang = arr;
+    that.setState(that.state);
   },
   render(){
     return(
@@ -20,7 +21,7 @@ var InputForm = React.createClass({
     return (
       <div>
         <input type="text" placeholder="Enter your text" ref="txt"/>
-        <button onClick={()=>{that.add(this.refs.txt)}}>Them</button>
+        <button onClick={()=>{this.props.handle(this.refs.txt)}}>Them</button>
       </div>
     );
   }
@@ -29,16 +30,30 @@ var InputForm = React.createClass({
 var List = React.createClass({
   getInitialState(){
     that = this;
-    return {mang: ["Android", "Node", "iOS", "PHP"] }
+    return {isAdding: false, mang: ["Android", "Node", "iOS", "PHP"]}
   },
   add(inputObj){
-    this.setState({mang: this.state.mang.concat(inputObj.value)})
+
+    this.state.mang.unshift(inputObj.value);
+    this.state.isAdding = false;
+
+    this.setState(this.state)
     inputObj.value = '';
   },
+  toggle(){
+    this.state.isAdding = true;
+    this.setState(this.state);
+  },
   render(){
+    var xhtml;
+    if(this.state.isAdding){
+      xhtml = <InputForm handle={this.add}/>
+    }else{
+      xhtml = <button onClick={this.toggle}>+</button>
+    }
     return (
       <div>
-        <InputForm/>
+        {xhtml}
         {
           this.state.mang.map( e => <Note>{e}</Note> )
         }

@@ -4,17 +4,39 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
 
-app.listen(process.env.PORT || 3000, ()=>console.log('Server started'));
+app.listen(process.env.PORT || 3000, () => console.log('Server started'));
 
 app.get('/', (req, res)=>res.render('homepage'));
 
-var arr = [1, 4, 5, 6, 3, 1];
-// arr.forEach(function(e){
-//   console.log(e);
-// })
+var {getAllNote, deleteNote, updateNote, insertNote} = require('./db.js');
 
-// arr.forEach((e) => console.log(e));
+app.get('/api/getNote', (req, res) => {
+  getAllNote(function(rows){
+    res.send(rows);
+  });
+});
 
-var gt = arr.findIndex((e)=>e==6)
+app.get('/api/update/:id/:note', (req, res) => {
+  var {id, note} = req.params;
+  updateNote(id, note, kq => {
+    if(kq > 0){
+      res.send('1');
+    }else{
+      res.send('0');
+    }
+  });
+});
 
-console.log(gt);
+app.get('/api/delete/:id', (req, res) => {
+  deleteNote(req.params.id, kq => {
+    var msg = kq > 0? 1: 0;
+    res.send(''+msg);
+  })
+})
+
+app.get('/api/insert/:note', (req, res) => {
+  insertNote(req.params.note, kq => {
+    var msg = kq > 0? 1: 0;
+    res.send(''+msg);
+  });
+});

@@ -17,6 +17,7 @@ function queryDB(sql, cb){
     if(err){
       console.log('LOI KET NOI ' + err);
     }else{
+      done();
       client.query(sql, cb);
     }
   });
@@ -53,11 +54,3 @@ function insertNote(value, cb){
 }
 
 module.exports = {getAllNote, deleteNote, updateNote, insertNote};
-console.log(module.exports);
-// updateNote(4, "Hello", function(count){
-//   if(count > 0){
-//     console.log('Thanh cong');
-//   }else{
-//     console.log('That bai');
-//   }
-// });

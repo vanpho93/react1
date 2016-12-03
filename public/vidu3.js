@@ -1,18 +1,38 @@
 var that;
+
 var Note = React.createClass({
+  getInitialState(){
+    return {isUpdating: false};
+  },
   remove(){
     var arr = that.state.mang;
     arr.splice(arr.indexOf(this.props.children), 1);
     that.state.mang = arr;
     that.setState(that.state);
   },
+  update(){
+    this.state.isUpdating = true;
+    this.setState(this.state);
+  },
   render(){
-    return(
-      <div>
-        <p>{this.props.children}</p>
-        <button onClick={this.remove}>Xoa</button>
-      </div>
-    )
+    if(!this.stata.isUpdating){
+      return(
+        <div>
+          <p>{this.props.children}</p>
+          <button onClick={this.remove}>Xoa</button>
+          <button onClick={this.update}>Sua</button>
+        </div>
+        )
+    }else{
+      return(
+        <div>
+          <input type="text" defaultValue={this.props.children} ref="txt"/>
+          <button onClick={this.save}>Luu</button>
+          <button onClick={this.cancel}>Huy</button>
+        </div>
+      );
+    }
+
   }
 });
 

@@ -14,8 +14,21 @@ var Note = React.createClass({
     this.state.isUpdating = true;
     this.setState(this.state);
   },
+  save(){
+    var arr = that.state.mang;
+    var i = this.props.id;
+    arr[i] = this.refs.txt.value;
+    that.setState(that.state);
+
+    this.state.isUpdating = false;
+    this.setState(this.state);
+  },
+  cancel(){
+    this.state.isUpdating = false;
+    this.setState(this.state);
+  },
   render(){
-    if(!this.stata.isUpdating){
+    if(!this.state.isUpdating){
       return(
         <div>
           <p>{this.props.children}</p>
@@ -37,11 +50,17 @@ var Note = React.createClass({
 });
 
 var InputForm = React.createClass({
+  // cancel(){
+  //   // that.state.isAdding = false;
+  //   // that.setState(that.state);
+  //   this.props.can();
+  // },
   render(){
     return (
       <div>
         <input type="text" placeholder="Enter your text" ref="txt"/>
         <button onClick={()=>{this.props.handle(this.refs.txt)}}>Them</button>
+        <button onClick={this.props.can}>Huy</button>
       </div>
     );
   }
@@ -60,6 +79,10 @@ var List = React.createClass({
     this.setState(this.state)
     inputObj.value = '';
   },
+  cancel(){
+    this.state.isAdding = false;
+    this.setState(this.state);
+  },
   toggle(){
     this.state.isAdding = true;
     this.setState(this.state);
@@ -67,7 +90,7 @@ var List = React.createClass({
   render(){
     var xhtml;
     if(this.state.isAdding){
-      xhtml = <InputForm handle={this.add}/>
+      xhtml = <InputForm handle={this.add} can={this.cancel}/>
     }else{
       xhtml = <button onClick={this.toggle}>+</button>
     }
@@ -75,7 +98,7 @@ var List = React.createClass({
       <div>
         {xhtml}
         {
-          this.state.mang.map( e => <Note>{e}</Note> )
+          this.state.mang.map( (e, i) => <Note id={i}>{e}</Note> )
         }
       </div>
     );

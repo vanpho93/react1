@@ -27,3 +27,37 @@ function queryDB(sql, cb){
 pool.on('error', function(err, client){
   console.log('LOI:: ' + err);
 });
+
+function getAllNote(cb){
+  queryDB(`SELECT * FROM "Notes"`, function(err, result){
+    cb(result.rows);
+  });
+}
+
+function deleteNote(id, cb){
+  queryDB(`DELETE FROM "Notes" WHERE id = ${id}`, (err, result) =>{
+    cb(result.rowCount);
+  });
+}
+
+function updateNote(id, value, cb){
+  queryDB(`UPDATE "Notes" SET note='${value}' WHERE id=${id}`, (err, result) => {
+    cb(result.rowCount);
+  });
+}
+
+function insertNote(value, cb){
+  queryDB(`INSERT INTO "Notes"(note) VALUES ('${value}')`, (err, result) => {
+    cb(result.rowCount);
+  });
+}
+
+module.exports = {getAllNote, deleteNote, updateNote, insertNote};
+console.log(module.exports);
+// updateNote(4, "Hello", function(count){
+//   if(count > 0){
+//     console.log('Thanh cong');
+//   }else{
+//     console.log('That bai');
+//   }
+// });

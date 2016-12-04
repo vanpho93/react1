@@ -13,7 +13,7 @@ var Note = React.createClass({
 
 var List = React.createClass({
   getInitialState(){
-    return {mang: ["Android", "iOS", "Node.js"]}
+    return {mang: []}
   },
   render(){
     var {mang} = this.state;
@@ -21,10 +21,16 @@ var List = React.createClass({
       <div>
         <NoteForm/>
         {
-          mang.map((e, i) => <Note key={i} id={i}>{e}</Note>)
+          mang.map(e => <Note key={e.id} id={e.id}>{e.note}</Note>)
         }
       </div>
     );
+  },
+  componentDidMount(){
+    $.get('/api/getNote', data => {
+      this.state.mang = data;
+      this.setState(this.state);
+    });
   }
 });
 

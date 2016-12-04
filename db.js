@@ -48,8 +48,12 @@ function updateNote(id, value, cb){
 }
 
 function insertNote(value, cb){
-  queryDB(`INSERT INTO "Notes"(note) VALUES ('${value}')`, (err, result) => {
-    cb(result.rowCount);
+  queryDB(`WITH row AS(
+	           INSERT INTO "Notes"(Note) VALUES ('${value}') RETURNING *
+          )
+          SELECT * FROM row`,
+  (err, result) => {
+    cb(result.rows[0]);
   });
 }
 

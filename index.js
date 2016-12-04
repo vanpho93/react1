@@ -35,8 +35,7 @@ app.get('/api/delete/:id', (req, res) => {
 })
 
 app.get('/api/insert/:note', (req, res) => {
-  insertNote(req.params.note, kq => {
-    var msg = kq > 0? 1: 0;
-    res.send(''+msg);
+  insertNote(req.params.note, row => {
+    res.send(row);
   });
 });

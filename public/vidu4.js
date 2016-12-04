@@ -1,10 +1,20 @@
+var that;
 var Note = React.createClass({
+  remove(){
+    $.get(`/api/delete/${this.props.id}`, data => {
+      if(data == 1){
+        var removeId = that.state.mang.findIndex(e => this.props.id==e.id);
+        that.state.mang.splice(removeId, 1);
+        that.setState(that.state);
+      }
+    });
+  },
   render(){
     var {children, id} = this.props;
     return (
       <div>
         <p>{children}</p>
-        <button>Xoa</button>
+        <button onClick={this.remove}>Xoa</button>
         <button>Sua</button>
       </div>
     );
@@ -13,6 +23,7 @@ var Note = React.createClass({
 
 var List = React.createClass({
   getInitialState(){
+    that = this;
     return {mang: []}
   },
   render(){
@@ -35,12 +46,19 @@ var List = React.createClass({
 });
 
 var NoteForm = React.createClass({
+  add(){
+    $.get(`/api/insert/${this.refs.txt.value}`, data => {
+      that.state.mang.push(data);
+      that.setState(that.state);
+      this.refs.txt.value = '';
+    });
+  },
   render(){
     return (
       <div>
         <input type="text" ref="txt" placeholder="Enter your note"/>
         <br/><br/>
-        <button>Them</button>
+        <button onClick={this.add}>Them</button>
       </div>
     );
   }

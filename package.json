@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vanpho93/react1#readme",
   "dependencies": {
-    "pg": "^6.1.0"
+    "pg": "^6.1.0",
+    "socket.io": "^1.7.1"
   }
 }

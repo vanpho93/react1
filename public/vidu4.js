@@ -1,5 +1,8 @@
 var that;
 var Note = React.createClass({
+  getInitialState(){
+    return {isUpdating: false};
+  },
   remove(){
     $.get(`/api/delete/${this.props.id}`, data => {
       if(data == 1){
@@ -9,15 +12,48 @@ var Note = React.createClass({
       }
     });
   },
+  cancel(){
+    this.state.isUpdating = false;
+    this.setState(this.state);
+  },
+  save(){
+    var {id} = this.props;
+    var {value} = this.refs.txt;
+    $.get(`/api/update/${id}/${value}`, data => {
+      if(data == 1){
+        var updateId = that.state.mang.findIndex(e => this.props.id==e.id);
+        that.state.mang[updateId].note = value;
+        that.setState(that.state);
+
+        this.state.isUpdating = false;
+        this.setState(this.state);
+      }
+    });
+  },
+  update(){
+    this.state.isUpdating = true;
+    this.setState(this.state);
+  },
   render(){
     var {children, id} = this.props;
-    return (
-      <div>
-        <p>{children}</p>
-        <button onClick={this.remove}>Xoa</button>
-        <button>Sua</button>
-      </div>
-    );
+    if(this.state.isUpdating){
+      return(
+        <div>
+          <input type="text" ref="txt" defaultValue={children}/>
+          <br/><br/>
+          <button onClick={this.save}>Luu</button>
+          <button onClick={this.cancel}>Huy</button>
+        </div>
+      );
+    }else{
+      return (
+        <div>
+          <p>{children}</p>
+          <button onClick={this.remove}>Xoa</button>
+          <button onClick={this.update}>Sua</button>
+        </div>
+      );
+    }
   }
 });
 
@@ -48,7 +84,7 @@ var List = React.createClass({
 var NoteForm = React.createClass({
   add(){
     $.get(`/api/insert/${this.refs.txt.value}`, data => {
-      that.state.mang.push(data);
+      that.state.mang.unshift(data);
       that.setState(that.state);
       this.refs.txt.value = '';
     });
@@ -63,4 +99,5 @@ var NoteForm = React.createClass({
     );
   }
 });
+
 ReactDOM.render(<List/>, document.getElementById('root'));

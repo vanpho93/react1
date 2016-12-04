@@ -30,7 +30,7 @@ pool.on('error', function(err, client){
 });
 
 function getAllNote(cb){
-  queryDB(`SELECT * FROM "Notes"`, function(err, result){
+  queryDB(`SELECT * FROM "Notes" ORDER BY (0 - id)`, function(err, result){
     cb(result.rows);
   });
 }

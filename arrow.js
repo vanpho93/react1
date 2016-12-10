@@ -1,7 +1,4 @@
-var a = param => param + param
-
-function b(param){
-  return param + param
-}
-
-console.log(a('Pho'));
+var a;
+a = 10
+var b = 5 || a;
+console.log(b);

@@ -15,6 +15,7 @@ var {getAllNote, deleteNote, updateNote, insertNote} = require('./db.js');
 
 io.on('connection', socket => {
   console.log('Co nguoi ket noi');
+
   getAllNote(rows => {
     socket.emit('SERVER_SEND_DATA_FIRST_TIME', rows);
   });
@@ -28,6 +29,16 @@ io.on('connection', socket => {
   socket.on('CLIENT_ADD_NOTE', note => {
     insertNote(note, row => {
       socket.emit('SERVER_ACCEPT_NOTE',row);
+    });
+  });
+
+  socket.on('CLIENT_UPDATE_NOTE', note => {
+    updateNote(note.id, note.value, rowCount => {
+      if(rowCount == 1){
+        socket.emit('SERVER_ACCEPT_UPDATE', note);
+      }else{
+        socket.emit('SERVER_ACCEPT_UPDATE', '');
+      }
     });
   });
 });

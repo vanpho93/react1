@@ -18,6 +18,13 @@ socket.on('SERVER_ACCEPT_NOTE', row => {
   that.setState(that.state);
 });
 
+socket.on('SERVER_ACCEPT_UPDATE', note => {
+  var obj = that.state.mang.find(e => e.id == note.id);
+  obj.note = note.value;
+  that.setState(that.state);
+});
+
+
 var Note = React.createClass({
   getInitialState(){
     return {isUpdating: false};
@@ -32,16 +39,11 @@ var Note = React.createClass({
   save(){
     var {id} = this.props;
     var {value} = this.refs.txt;
-    $.get(`/api/update/${id}/${value}`, data => {
-      if(data == 1){
-        var updateId = that.state.mang.findIndex(e => this.props.id==e.id);
-        that.state.mang[updateId].note = value;
-        that.setState(that.state);
 
-        this.state.isUpdating = false;
-        this.setState(this.state);
-      }
-    });
+    socket.emit('CLIENT_UPDATE_NOTE', {id,value});
+    this.refs.txt.value = '';
+    this.state.isUpdating = false;
+    this.setState(this.state);
   },
   update(){
     this.state.isUpdating = true;

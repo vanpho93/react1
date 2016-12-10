@@ -13,6 +13,11 @@ socket.on('SERVER_CONFIRM_DELETE', data => {
   }
 });
 
+socket.on('SERVER_ACCEPT_NOTE', row => {
+  that.state.mang.push(row);
+  that.setState(that.state);
+});
+
 var Note = React.createClass({
   getInitialState(){
     return {isUpdating: false};
@@ -85,11 +90,8 @@ var List = React.createClass({
 
 var NoteForm = React.createClass({
   add(){
-    $.get(`/api/insert/${this.refs.txt.value}`, data => {
-      that.state.mang.unshift(data);
-      that.setState(that.state);
-      this.refs.txt.value = '';
-    });
+    socket.emit('CLIENT_ADD_NOTE', this.refs.txt.value);
+    this.refs.txt.value = '';
   },
   render(){
     return (

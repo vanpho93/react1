@@ -24,4 +24,10 @@ io.on('connection', socket => {
       socket.emit('SERVER_CONFIRM_DELETE', {result: kq, index: data});
     });
   });
+
+  socket.on('CLIENT_ADD_NOTE', note => {
+    insertNote(note, row => {
+      socket.emit('SERVER_ACCEPT_NOTE',row);
+    });
+  });
 });
